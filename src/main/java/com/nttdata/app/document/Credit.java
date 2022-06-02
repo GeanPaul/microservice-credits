@@ -1,12 +1,14 @@
 package com.nttdata.app.document;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "credit")
 //Clase que representa a mi entidad crédito
 public class Credit {

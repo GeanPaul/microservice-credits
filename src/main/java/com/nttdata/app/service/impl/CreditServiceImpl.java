@@ -39,4 +39,17 @@ public class CreditServiceImpl implements ICreditService {
     public Mono<Void> deleteCredit(Credit credit) {
         return creditRepository.delete(credit);
     }
+
+
+    public  Mono<Credit> getPersonalCreditByIdCustomer(String idCustomer)
+    {
+        return creditRepository.findByIdCustomer(idCustomer);
+    }
+
+    public  Flux<Credit> getBusinessCreditByIdCustomer(String idCustomer)
+    {
+        return creditRepository.findAllByIdCustomer(idCustomer);
+    }
+
+
 }

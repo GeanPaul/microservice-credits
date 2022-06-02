@@ -1,6 +1,7 @@
 package com.nttdata.app.controller;
 
 import com.nttdata.app.document.Credit;
+import com.nttdata.app.service.ICreditService;
 import com.nttdata.app.service.impl.CreditServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,35 +14,37 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/credits")
 public class CreditController {
 
+
+
     @Autowired
-    private CreditServiceImpl creditServiceImpl;
+    private CreditServiceImpl cd;
 
 
     @GetMapping
     public Flux<Credit> findAllCredit() {
         log.info("Credits get All");
-        return creditServiceImpl.getAllCredit();
+        return cd.getAllCredit();
 
     }
 
     @GetMapping("/{id}")
     public Mono<Credit> findAllCreditById(@PathVariable String id) {
         log.info("Credits get id: " + id);
-        return creditServiceImpl.getFindAllByIdCredit(id);
+        return cd.getFindAllByIdCredit(id);
 
     }
 
     @PostMapping("/create")
     public Mono<Credit> saveCredit(@RequestBody Credit credit) {
         log.info("Credit created \n" + credit.toString());
-        return creditServiceImpl.createCredit(credit);
+        return cd.createCredit(credit);
 
     }
 
     @PutMapping("/update")
     public Mono<Credit> updateCredit(@RequestBody Credit credit) {
 
-        Mono<Credit> mono = creditServiceImpl.getFindAllByIdCredit(credit.getIdCredit());
+        Mono<Credit> mono = cd.getFindAllByIdCredit(credit.getIdCredit());
         return mono.flatMap(ac -> {
             ac.setTypeCredit(credit.getTypeCredit());
             ac.setNumberCredit(credit.getNumberCredit());
@@ -49,20 +52,36 @@ public class CreditController {
             ac.setAvailableBalance(credit.getAvailableBalance());
             ac.setIdCustomer(credit.getIdCustomer());
             log.info("Credits by id: " + credit.getIdCredit() + " " + "updated");
-            return creditServiceImpl.updateCredit(ac);
+            return cd.updateCredit(ac);
         });
     }
 
     @DeleteMapping("/delete/{id}")
     public Mono<Void> deleteCredit(@PathVariable String id) {
-        Mono<Credit> mono = creditServiceImpl.getFindAllByIdCredit(id);
+        Mono<Credit> mono = cd.getFindAllByIdCredit(id);
         return mono.flatMap(ac -> {
             log.info("Savings Account by id: " + id + " " + "delete");
-            return creditServiceImpl.deleteCredit(ac);
+            return cd.deleteCredit(ac);
         });
 
 
     }
+
+    @GetMapping("/credit-personal/{idCustomer}")
+    public Mono<Credit> getAllPersonalCreditByIdCustomer(@PathVariable String idCustomer)
+    {
+        return  cd.getPersonalCreditByIdCustomer(idCustomer);
+
+    }
+
+    @GetMapping("/credit-business/{idCustomer}")
+    public Flux<Credit> getAllBusinessCreditByIdCustomer(@PathVariable String idCustomer)
+    {
+        return  cd.getBusinessCreditByIdCustomer(idCustomer);
+
+    }
+
+
 
 
 
