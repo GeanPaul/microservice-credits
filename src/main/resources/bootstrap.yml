@@ -1,7 +1,7 @@
 #server.port=8083
 spring:
     application:
-        name: microservice-credits-dev
+        name: microservice-credits
     cloud:
       config:
           enabled: true
